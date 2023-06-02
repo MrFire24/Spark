@@ -33,7 +33,7 @@
     <ClCompile Include="imgui\imgui-SFML.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="Backend.cpp">
+    <ClCompile Include="Object.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,7 +1,9 @@
-﻿#include <iostream>
-#include "imgui.h"
+﻿#include "imgui.h"
 #include "imgui-SFML.h"
 #include <SFML/Graphics.hpp>
+#include <iostream>
+#include <vector>
+#include <functional>
 
 
 int main()
