@@ -36,7 +36,6 @@ int main()
         ImGui::SFML::Update(window, deltaClock.restart());
 
         ImGui::Begin("Window title");
-        ImGui::Text("Test");
         ImGui::Text("Window Pos = %d, %d", window.getPosition().x, window.getPosition().y);
         ImGui::Checkbox("Circle", &circleExists);
         ImGui::SliderFloat("Radius", &circleRadius, 100.0f, 300.0f);
