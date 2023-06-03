@@ -1,12 +1,4 @@
-#include "imgui.h"
-#include "imgui-SFML.h"
-#include <SFML/Graphics.hpp>
-#include <iostream>
-#include <vector>
-#include <functional>
-
 #include "Backend.h"
-
 
 //Activate Methods that need it
 void Object::update() {
@@ -21,22 +13,23 @@ void Object::checkForDeath() {
 }
 
 //Base Methods
-int			 Object::getID()			{ return ID_; }
-float		 Object::getHealth()		{ return Health_; }
-float		 Object::getMax_Health()	{ return Max_Health_; }
-sf::Vector3f Object::getPosition()		{ return Position_; }
+int			Object::getID()			{ return ID_; }
+float		Object::getHealth()		{ return Health_; }
+float		Object::getMax_Health()	{ return Max_Health_; }
+vec3f Object::getPosition()	{ return Position_; }
 
 //Check Special Ñharacteristic
 bool Object::isImmortal() { return Max_Health_ == -1 ? true : false; }	//Max HP = -1 for immortal object
 bool Object::isSolid()	{ return isSolid_; }
 
 //Actions
-void Object::teleport(float x, float y, float z) {
-	Position_ = { x, y, z };
-}
+void Object::teleport(vec3f vec) { Position_ = vec; }
 void Object::teleport(float x, float z) {
 	Position_.x = x;
 	Position_.z = z;
+}
+void Object::teleport(float x, float y, float z) {
+	Position_ = { x, y, z };
 }
 void Object::kill(int reason = 0) {
 	Health_ = 0;

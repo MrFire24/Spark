@@ -158,6 +158,7 @@
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="Spark.cpp" />
+    <ClCompile Include="vec3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

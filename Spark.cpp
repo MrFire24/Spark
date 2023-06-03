@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <functional>
+#include <type_traits>
 
 
 int main()
