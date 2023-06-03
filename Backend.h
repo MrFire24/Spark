@@ -50,9 +50,9 @@ public:
 	Cylinder(float radius, float height, vec3f* position) : Position_(position), Height_(height), Radius_(radius) {};
 
 	bool isColliding(Cylinder cyl) {
-		//bool collXZ = 
+		bool collXZ = this->Position_->distanceTo(*cyl.Position_) <= (Radius_ + cyl.Radius_);
 		bool collY = ((this->Position_->y >= (cyl.Position_->y - cyl.Height_)) && ((this->Position_->y - this->Height_) <= cyl.Position_->y));
-		return true;
+		return collXZ && collY;
 	}
 };
 
