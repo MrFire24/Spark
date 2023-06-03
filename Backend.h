@@ -16,16 +16,17 @@ public:
 	void normalize();
 	vec3f get_norm();
 	float length();
+	float distanceTo(vec3f);
 	void set(float x, float y, float z);
-
-	void operator+(vec3f vec);
-	void operator-(vec3f vec);
-
-	vec3f operator*(float num) const;
-	vec3f operator/(float num) const;
 
 	void operator=(vec3f vec);
 	void operator=(float num);
+
+	vec3f operator+(vec3f vec);
+	vec3f operator-(vec3f vec);
+
+	vec3f operator*(float num) const;
+	vec3f operator/(float num) const;
 
 	friend std::ostream& operator<<(std::ostream& stream, const vec3f& object) {
 		stream << object.x << " " << object.y << " " << object.z;
@@ -34,28 +35,26 @@ public:
 };
 
 
-/*
+
 class Hitbox {
-private:
 public:
-	bool isColliding(const Cylinder& cyl1, const Cylinder& cyl2);
 };
 
 class Cylinder : Hitbox {
 private:
-	float Radius_;
-	float Height_;
 	vec3f* Position_;
-	friend class Hitbox;
+	float Height_;
+	float Radius_;
+	//friend class Hitbox;
 public:
-	Cylinder(float radius, float height, vec3f* position) : Radius_(radius), Height_(height), Position_(position) {};
-};
+	Cylinder(float radius, float height, vec3f* position) : Position_(position), Height_(height), Radius_(radius) {};
 
-bool Hitbox::isColliding(const Cylinder& cyl1, const Cylinder& cyl2) {
-	//bool collXZ = 
-	bool collY = ((cyl1.Position_->y >= (cyl2.Position_->y - cyl2.Height_)) && ((cyl1.Position_->y - cyl1.Height_) <= cyl2.Position_->y));
-    return true;
-} */
+	bool isColliding(Cylinder cyl) {
+		//bool collXZ = 
+		bool collY = ((this->Position_->y >= (cyl.Position_->y - cyl.Height_)) && ((this->Position_->y - this->Height_) <= cyl.Position_->y));
+		return true;
+	}
+};
 
 class Object{
 private:
@@ -97,8 +96,5 @@ public:
     void teleport(vec3f);
 	void teleport(float, float, float);
 	void teleport(float, float);
-
-
-	
 
 };
