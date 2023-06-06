@@ -6,6 +6,8 @@
 #include <functional>
 #include <type_traits>
 
+#include "Backend.h"
+
 
 int main()
 {
@@ -26,6 +28,15 @@ int main()
     shape.setOrigin(circleRadius, circleRadius);
     shape.setPosition(window.getSize().x / 2, window.getSize().y / 2); // Center circle
 
+
+
+    float rad1 = 150.0f, rad2 = 150.0f;
+    vec3f pos1 = vec3f(window.getSize().x / 2, 0, window.getSize().y / 2);
+    vec3f pos2 = vec3f(window.getSize().x / 2, 0, window.getSize().y / 2);
+    sf::CircleShape circ1(rad1, 100), circ2(rad2, 100);
+    HitBox::Cylinder hitBox1(&pos1), hitBox2(&pos2);
+
+
     sf::Clock deltaClock;
     while (window.isOpen())
     {
@@ -38,6 +49,7 @@ int main()
         }
         ImGui::SFML::Update(window, deltaClock.restart());
 
+        
         ImGui::Begin("Window title");
         ImGui::Text("Window Pos = %d, %d", window.getPosition().x, window.getPosition().y);
         ImGui::Checkbox("Circle", &circleExists);
@@ -56,9 +68,41 @@ int main()
             (int)(circleColor[2] * 255)
         )); // Color circle
 
+
+        ImGui::Begin("Circle 1");
+        ImGui::SliderFloat("Radius", &rad1, 50.0f, 300.0f);
+        ImGui::SliderFloat("X", &pos1.x, 0.0f, window.getSize().x);
+        ImGui::SliderFloat("Z", &pos1.z, 0.0f, window.getSize().y);
+        ImGui::End();
+
+        ImGui::Begin("Circle 2");
+        ImGui::SliderFloat("Radius", &rad2, 50.0f, 300.0f);
+        ImGui::SliderFloat("X", &pos2.x, 0.0f, window.getSize().x);
+        ImGui::SliderFloat("Z", &pos2.z, 0.0f, window.getSize().y);
+        ImGui::End();
+
+
+        circ1.setRadius(rad1);
+        circ1.setOrigin(rad1, rad1);
+        circ1.setPosition(pos1.x, pos1.z);
+        hitBox1.Radius_ = rad1;
+
+        circ2.setRadius(rad2);
+        circ2.setOrigin(rad2, rad2);
+        circ2.setPosition(pos2.x, pos2.z);
+        hitBox2.Radius_ = rad2;
+
+        if (hitBox1.isColliding(hitBox2)) circ1.setFillColor(sf::Color(250, 0, 0));
+        else circ1.setFillColor(sf::Color(250, 250, 250));
+        if (hitBox2.isColliding(hitBox1)) circ2.setFillColor(sf::Color(250, 0, 0));
+        else circ2.setFillColor(sf::Color(250, 250, 250));
+
+
         window.clear(sf::Color(18, 33, 43)); // Color background
-        if (circleExists)
-            window.draw(shape);
+        //if (circleExists)
+        //    window.draw(shape);
+        window.draw(circ1);
+        window.draw(circ2);
         ImGui::SFML::Render(window);
         window.display();
     }

@@ -11,13 +11,13 @@ class vec3f {
 public:
 	float x = 0, y = 0, z = 0;
 
-	vec3f(float x = 0, float y = 0, float z = 0);
+	vec3f(float, float, float);
 
 	void normalize();
 	vec3f get_norm();
 	float length();
 	float distanceTo(vec3f);
-	void set(float x, float y, float z);
+	//void set(float x, float y, float z);
 
 	void operator=(vec3f vec);
 	void operator=(float num);
@@ -37,24 +37,58 @@ public:
 
 
 class Hitbox {
-public:
-};
-
-class Cylinder : Hitbox {
-private:
+protected:
 	vec3f* Position_;
-	float Height_;
-	float Radius_;
-	//friend class Hitbox;
 public:
-	Cylinder(float radius, float height, vec3f* position) : Position_(position), Height_(height), Radius_(radius) {};
-
-	bool isColliding(Cylinder cyl) {
-		bool collXZ = this->Position_->distanceTo(*cyl.Position_) <= (Radius_ + cyl.Radius_);
-		bool collY = ((this->Position_->y >= (cyl.Position_->y - cyl.Height_)) && ((this->Position_->y - this->Height_) <= cyl.Position_->y));
-		return collXZ && collY;
-	}
 };
+
+namespace HitBox {
+
+	class Cylinder : Hitbox {
+		//friend class Hitbox;
+	public:
+		float Height_ = 1;
+		float Radius_ = 1;
+
+		Cylinder(float radius, float height, vec3f* position) {
+			Position_ = position;
+			Height_ = height;
+			Radius_ = radius;
+		};
+		Cylinder(vec3f* pos) {
+			Position_ = pos;
+		}
+
+		bool isColliding(Cylinder cyl) {
+			bool collXZ = this->Position_->distanceTo(*cyl.Position_) <= (Radius_ + cyl.Radius_);
+			bool collY = ((this->Position_->y >= (cyl.Position_->y - cyl.Height_)) && ((this->Position_->y - this->Height_) <= cyl.Position_->y));
+			return collXZ && collY;
+		}
+	};
+
+	class Cube : Hitbox {
+		//friend class Hitbox;
+	public:
+		float Height_ = 1;
+		float Radius_ = 1;
+
+		Cube(float radius, float height, vec3f* position) {
+			Position_ = position;
+			Height_ = height;
+			Radius_ = radius;
+		};
+		Cube(vec3f* pos) {
+			Position_ = pos;
+		}
+
+		bool isColliding(Cube cyl) {
+			bool collXZ = this->Position_->distanceTo(*cyl.Position_) <= (Radius_ + cyl.Radius_);
+			bool collY = ((this->Position_->y >= (cyl.Position_->y - cyl.Height_)) && ((this->Position_->y - this->Height_) <= cyl.Position_->y));
+			return collXZ && collY;
+		}
+	};
+}
+
 
 class Object{
 private:
