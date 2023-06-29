@@ -11,7 +11,7 @@ class vec3f {
 public:
 	float x = 0, y = 0, z = 0;
 
-	vec3f(float, float, float);
+	vec3f(float x, float y, float z);
 
 	void normalize();
 	vec3f get_norm();

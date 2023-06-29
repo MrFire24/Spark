@@ -31,11 +31,12 @@ int main()
 
 
     float rad1 = 150.0f, rad2 = 150.0f;
-    vec3f pos1 = vec3f(window.getSize().x / 2, 0, window.getSize().y / 2);
-    vec3f pos2 = vec3f(window.getSize().x / 2, 0, window.getSize().y / 2);
+    float RGB_Pos1[3] = { window.getSize().x / 2, 0.f, window.getSize().y / 2 };
+    vec3f vec1 = vec3f(window.getSize().x / 2, 0.f, window.getSize().y / 2);
+    float RGB_Pos2[3] = { window.getSize().x / 2, 0.f, window.getSize().y / 2 };
+    vec3f vec2 = vec3f(window.getSize().x / 2, 0.f, window.getSize().y / 2);
     sf::CircleShape circ1(rad1, 100), circ2(rad2, 100);
-    HitBox::Cylinder hitBox1(&pos1), hitBox2(&pos2);
-
+    HitBox::Cylinder hitBox1(&vec1), hitBox2(&vec2);
 
     sf::Clock deltaClock;
     while (window.isOpen())
@@ -49,7 +50,7 @@ int main()
         }
         ImGui::SFML::Update(window, deltaClock.restart());
 
-        
+        /*
         ImGui::Begin("Window title");
         ImGui::Text("Window Pos = %d, %d", window.getPosition().x, window.getPosition().y);
         ImGui::Checkbox("Circle", &circleExists);
@@ -67,30 +68,37 @@ int main()
             (int)(circleColor[1] * 255),
             (int)(circleColor[2] * 255)
         )); // Color circle
+        */
 
 
         ImGui::Begin("Circle 1");
         ImGui::SliderFloat("Radius", &rad1, 50.0f, 300.0f);
-        ImGui::SliderFloat("X", &pos1.x, 0.0f, window.getSize().x);
-        ImGui::SliderFloat("Z", &pos1.z, 0.0f, window.getSize().y);
+        ImGui::ColorEdit3("Color Circle", RGB_Pos1);
+        ImGui::Text("R: %f\nG: %f\nB: %f\n\n", RGB_Pos1[0], RGB_Pos1[1], RGB_Pos1[2]);
+        ImGui::Text("X: %f\nY: %f\nZ: %f\n", (1. - (RGB_Pos1[1] / RGB_Pos1[0])) * window.getSize().x, 0.f, (1. - RGB_Pos1[0]) * window.getSize().y);
         ImGui::End();
+        vec1 = vec3f((1. - (RGB_Pos1[1] / RGB_Pos1[0])) * window.getSize().x, 0.f, (1. - RGB_Pos1[0])* window.getSize().y);
 
         ImGui::Begin("Circle 2");
         ImGui::SliderFloat("Radius", &rad2, 50.0f, 300.0f);
-        ImGui::SliderFloat("X", &pos2.x, 0.0f, window.getSize().x);
-        ImGui::SliderFloat("Z", &pos2.z, 0.0f, window.getSize().y);
+        ImGui::ColorEdit3("Color Circle", RGB_Pos2);
+        ImGui::Text("R: %f\nG: %f\nB: %f\n\n", RGB_Pos2[0], RGB_Pos2[1], RGB_Pos2[2]);
+        ImGui::Text("X: %f\nY: %f\nZ: %f\n", (1. - (RGB_Pos2[1] / RGB_Pos2[0])) * window.getSize().x, 0.f, (1. - RGB_Pos2[0]) * window.getSize().y);
         ImGui::End();
+        vec2 = vec3f((1. - (RGB_Pos2[1] / RGB_Pos2[0])) * window.getSize().x, 0.f, (1. - RGB_Pos2[0])* window.getSize().y);
 
-
+        //vec1 = vec3f(1, 1, 1);
         circ1.setRadius(rad1);
         circ1.setOrigin(rad1, rad1);
-        circ1.setPosition(pos1.x, pos1.z);
+        circ1.setPosition(vec1.x, vec1.z);
         hitBox1.Radius_ = rad1;
 
+        //vec2 = vec3f(1, 1, 1);
         circ2.setRadius(rad2);
         circ2.setOrigin(rad2, rad2);
-        circ2.setPosition(pos2.x, pos2.z);
+        circ2.setPosition(vec2.x, vec2.z);
         hitBox2.Radius_ = rad2;
+
 
         if (hitBox1.isColliding(hitBox2)) circ1.setFillColor(sf::Color(250, 0, 0));
         else circ1.setFillColor(sf::Color(250, 250, 250));

@@ -1,6 +1,10 @@
 #include "Backend.h"
 
-vec3f::vec3f(float x, float y, float z) : x(x), y(y), z(z) {}
+vec3f::vec3f(float x, float y, float z) {
+    this->x = x;
+    this->y = y;
+    this->z = z;
+}
 
 //  normalizes this vector
 void vec3f::normalize() {
@@ -42,7 +46,11 @@ void vec3f::operator = (float num) {
     normalize();
     *this = vec3f(x * num, y * num, z * num);
 }
-void vec3f::operator = (vec3f vec) { *this = vec3f(vec.x, vec.y, vec.z); }
+void vec3f::operator = (vec3f vec) {
+    x = vec.x;
+    y = vec.y;
+    z = vec.z;
+}
 
 vec3f vec3f::operator + (vec3f vec) { return vec3f(this->x + vec.x, this->y + vec.y, this->z + vec.z); }
 vec3f vec3f::operator - (vec3f vec) { return vec3f(this->x - vec.x, this->y - vec.y, this->z - vec.z); }
