@@ -60,9 +60,12 @@ namespace HitBox {
 		}
 
 		bool isColliding(Cylinder cyl) {
-			bool collXZ = this->Position_->distanceTo(*cyl.Position_) <= (Radius_ + cyl.Radius_);
-			bool collY = ((this->Position_->y >= (cyl.Position_->y - cyl.Height_)) && ((this->Position_->y - this->Height_) <= cyl.Position_->y));
-			return collXZ && collY;
+			return 
+				this->Position_->distanceTo(*cyl.Position_) <= (this->Radius_ + cyl.Radius_)
+				&& (
+				this->Position_->y == cyl.Position_->y ?
+				1 : this->Position_->y > cyl.Position_->y ?
+				(this->Position_->y - cyl.Position_->y) < cyl.Height_ : (cyl.Position_->y - this->Position_->y) < this->Height_);
 		}
 	};
 
@@ -90,7 +93,7 @@ namespace HitBox {
 }
 
 
-class Object{
+class Object {
 private:
 	//Base Info
 	int ID_;	//Temporary
