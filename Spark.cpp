@@ -1,6 +1,4 @@
 ﻿#include "imgui.h"
-#include "imgui-SFML.h"
-#include <SFML/Graphics.hpp>
 #include <algorithm>
 #include <iostream>
 #include <vector>
@@ -30,6 +28,7 @@ void rgb_to_hsv(float rgb[3], float hsv[3]) {
 
 int main()
 {
+    /*
     sf::RenderWindow window(sf::VideoMode(1200, 800), "Window Title");
     ImGui::SFML::Init(window);
 
@@ -89,7 +88,7 @@ int main()
             (int)(circleColor[1] * 255),
             (int)(circleColor[2] * 255)
         )); // Color circle
-        */
+        /* /////////////
 
 
         ImGui::Begin("Circle 1");
@@ -150,5 +149,6 @@ int main()
     }
 
     ImGui::SFML::Shutdown();
+    */
     return 0;
 }
