@@ -75,6 +75,9 @@
     <ClCompile Include="Libraries\include\glm\detail\glm.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="Source Files\Camera.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imgui\imconfig.h">
@@ -857,6 +860,9 @@
     <ClInclude Include="Libraries\include\glm\vector_relational.hpp">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="Header Files\Camera.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="imgui.ini" />
@@ -1273,6 +1279,12 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resource Files\Textures\wall.png">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="..\..\..\Downloads\RAB_STOL_4.PNG">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="Resource Files\Textures\RAB_STOL_4.PNG">
       <Filter>Файлы ресурсов</Filter>
     </Image>
   </ItemGroup>

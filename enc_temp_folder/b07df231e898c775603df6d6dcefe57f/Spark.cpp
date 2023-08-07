@@ -119,6 +119,7 @@ int main()
 
 
     Camera camera(width, height, glm::vec3(0.0f, 0.0f, 3.0f));
+    camera.Matrix(45.0f, 0.1f, 100.0f, shaderProgram, "camMatrix");
 
     ////
     while (!glfwWindowShouldClose(window)) {
@@ -131,7 +132,7 @@ int main()
         shaderProgram.Activate();
 
         camera.Inputs(window);
-        camera.Matrix(45.0f, 0.1f, 100.0f, shaderProgram, "camMatrix");
+        
 
         wall.Bind();
 

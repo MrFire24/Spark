@@ -165,6 +165,7 @@
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="Libraries\include\glm\detail\glm.cpp" />
+    <ClCompile Include="Source Files\Camera.cpp" />
     <ClCompile Include="Source Files\EBO.cpp" />
     <ClCompile Include="Source Files\glad.c" />
     <ClCompile Include="Source Files\Object.cpp" />
@@ -177,6 +178,7 @@
     <ClCompile Include="Source Files\vec3.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Header Files\Camera.h" />
     <ClInclude Include="Header Files\EBO.h" />
     <ClInclude Include="Header Files\Hitbox.h" />
     <ClInclude Include="Header Files\Object.h" />
@@ -584,6 +586,8 @@
     <None Include="Resource Files\Shaders\textured.vert" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\..\..\Downloads\RAB_STOL_4.PNG" />
+    <Image Include="Resource Files\Textures\RAB_STOL_4.PNG" />
     <Image Include="Resource Files\Textures\wall.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
