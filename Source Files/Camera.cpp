@@ -1,4 +1,5 @@
 #include "Camera.h"
+#include <cmath>
 
 Camera::Camera(int width, int height, glm::vec3 position)
 {
@@ -22,43 +23,55 @@ void Camera::Matrix(float FOVdeg, float nearPlane, float farPlane, Shader& shade
 	glUniformMatrix4fv(glGetUniformLocation(shader.ID, uniform), 1, GL_FALSE, glm::value_ptr(projection * view));
 }
 
-
-
 void Camera::Inputs(GLFWwindow* window)
 {
-	// Handles key inputs
+	bool isAnyButtonPressed = false;
+
+	#define magic powf(1.0f / (powf(std::sqrt(Speed.x * Speed.x + Speed.y * Speed.y + Speed.z * Speed.z) - max_speed / 0.7, 2.0f) + 0.85f - (sprint ? 0.1 : 0)), 10) / 1000.0f
+
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 	{
-		Position += speed * Orientation;
+		isAnyButtonPressed = true;
+		std::cout << std::endl << Speed.x << std::endl << Speed.y << std::endl << Speed.z << std::endl << std::sqrt(Speed.x * Speed.x + Speed.y * Speed.y + Speed.z * Speed.z) << std::endl << powf(1.0f / (powf(std::sqrt(Speed.x * Speed.x + Speed.y * Speed.y + Speed.z * Speed.z) - max_speed, 2.0f) + 1.0f), 100) << std::endl;
+		Speed += Orientation * magic;
 	}
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
 	{
-		Position += speed * -glm::normalize(glm::cross(Orientation, Up));
+		isAnyButtonPressed = true;
+		Speed += -glm::normalize(glm::cross(Orientation, Up)) * magic;
 	}
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 	{
-		Position += speed * -Orientation;
+		isAnyButtonPressed = true;
+		Speed += -Orientation * magic;
 	}
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 	{
-		Position += speed * glm::normalize(glm::cross(Orientation, Up));
+		isAnyButtonPressed = true;
+		Speed += glm::normalize(glm::cross(Orientation, Up)) * magic;
 	}
 	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
 	{
-		Position += speed * Up;
+		isAnyButtonPressed = true;
+		Speed += Up * magic;
 	}
 	if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
 	{
-		Position += speed * -Up;
+		isAnyButtonPressed = true;
+		Speed += -Up * magic;
 	}
 	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
 	{
-		speed = 0.4f;
+		sprint = true;
 	}
 	else if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE)
 	{
-		speed = 0.1f;
+		sprint = false;
 	}
+
+	Speed /= 1.1f;
+
+	Position += Speed;
 
 
 	// Handles mouse inputs
