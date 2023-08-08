@@ -91,7 +91,7 @@ int main()
     ////
 
     // Создаем шейдер программу
-    Shader shaderProgram("multitask.vert", "multitask.frag");
+    Shader shaderProgram("default.vert", "default.frag");
 
     VAO VAO1;
     VAO1.Bind();
@@ -111,7 +111,7 @@ int main()
     float c = 0, bx, by;
     
     ////
-    Texture wall("wall.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
+    Texture wall("old_wall.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
     wall.texUnit(shaderProgram, "tex0", 0);
 
 
@@ -131,7 +131,9 @@ int main()
         shaderProgram.Activate();
 
         camera.Inputs(window);
-        camera.Matrix(45.0f, 0.1f, 100.0f, shaderProgram, "camMatrix");
+
+        camera.updateMatrix(camera.FOV, 0.01f, 100.0f);
+        camera.Matrix(shaderProgram, "camMatrix");
 
         wall.Bind();
 

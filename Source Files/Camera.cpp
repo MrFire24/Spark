@@ -1,14 +1,16 @@
 #include "Camera.h"
 #include <cmath>
 
+#define Up glm::vec3(0.0f, 1.0f, 0.0f)
+
 Camera::Camera(int width, int height, glm::vec3 position)
 {
-Camera::width = width;
-Camera::height = height;
-Position = position;
+	Camera::width = width;
+	Camera::height = height;
+	Position = position;
 }
 
-void Camera::Matrix(float FOVdeg, float nearPlane, float farPlane, Shader& shader, const char* uniform)
+void Camera::updateMatrix(float FOVdeg, float nearPlane, float farPlane)
 {
 	// Initializes matrices since otherwise they will be the null matrix
 	glm::mat4 view = glm::mat4(1.0f);
@@ -19,8 +21,14 @@ void Camera::Matrix(float FOVdeg, float nearPlane, float farPlane, Shader& shade
 	// Adds perspective to the scene
 	projection = glm::perspective(glm::radians(FOVdeg), (float)width / height, nearPlane, farPlane);
 
-	// Exports the camera matrix to the Vertex Shader
-	glUniformMatrix4fv(glGetUniformLocation(shader.ID, uniform), 1, GL_FALSE, glm::value_ptr(projection * view));
+	// Sets new camera matrix
+	cameraMatrix = projection * view;
+}
+
+void Camera::Matrix(Shader& shader, const char* uniform)
+{
+	// Exports camera matrix
+	glUniformMatrix4fv(glGetUniformLocation(shader.ID, uniform), 1, GL_FALSE, glm::value_ptr(cameraMatrix));
 }
 
 void Camera::Inputs(GLFWwindow* window)
@@ -32,7 +40,7 @@ void Camera::Inputs(GLFWwindow* window)
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 	{
 		isAnyButtonPressed = true;
-		std::cout << std::endl << Speed.x << std::endl << Speed.y << std::endl << Speed.z << std::endl << std::sqrt(Speed.x * Speed.x + Speed.y * Speed.y + Speed.z * Speed.z) << std::endl << powf(1.0f / (powf(std::sqrt(Speed.x * Speed.x + Speed.y * Speed.y + Speed.z * Speed.z) - max_speed, 2.0f) + 1.0f), 100) << std::endl;
+		//std::cout << std::endl << Speed.x << std::endl << Speed.y << std::endl << Speed.z << std::endl << std::sqrt(Speed.x * Speed.x + Speed.y * Speed.y + Speed.z * Speed.z) << std::endl << powf(1.0f / (powf(std::sqrt(Speed.x * Speed.x + Speed.y * Speed.y + Speed.z * Speed.z) - max_speed, 2.0f) + 1.0f), 100) << std::endl;
 		Speed += Orientation * magic;
 	}
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
@@ -55,16 +63,16 @@ void Camera::Inputs(GLFWwindow* window)
 		isAnyButtonPressed = true;
 		Speed += Up * magic;
 	}
-	if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
 	{
 		isAnyButtonPressed = true;
 		Speed += -Up * magic;
 	}
-	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
 	{
 		sprint = true;
 	}
-	else if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE)
+	else if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_RELEASE)
 	{
 		sprint = false;
 	}
@@ -72,6 +80,15 @@ void Camera::Inputs(GLFWwindow* window)
 	Speed /= 1.1f;
 
 	Position += Speed;
+
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE) == GLFW_PRESS)
+	{
+		FOV -= (FOV - 30.0f) / 5.0f;
+	}
+	else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE) == GLFW_RELEASE)
+	{
+		FOV += (60.0f - FOV) / 5.0f;
+	}
 
 
 	// Handles mouse inputs

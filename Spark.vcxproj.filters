@@ -866,12 +866,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="imgui.ini" />
-    <None Include="Resource Files\Shaders\default.frag" />
-    <None Include="Resource Files\Shaders\default.vert" />
+    <None Include="Resource Files\Shaders\one_color.frag" />
+    <None Include="Resource Files\Shaders\one_color.vert" />
     <None Include="Resource Files\Shaders\multicolor_fragments.frag" />
     <None Include="Resource Files\Shaders\multicolor_fragments.vert" />
-    <None Include="Resource Files\Shaders\textured.frag" />
-    <None Include="Resource Files\Shaders\textured.vert" />
+    <None Include="Resource Files\Shaders\textured_old.frag" />
+    <None Include="Resource Files\Shaders\textured_old.vert" />
     <None Include="Libraries\include\glm\detail\func_common.inl">
       <Filter>Файлы заголовков</Filter>
     </None>
@@ -1274,8 +1274,8 @@
     <None Include="Libraries\include\glm\gtx\wrap.inl">
       <Filter>Файлы заголовков</Filter>
     </None>
-    <None Include="Resource Files\Shaders\multitask.frag" />
-    <None Include="Resource Files\Shaders\multitask.vert" />
+    <None Include="Resource Files\Shaders\default.frag" />
+    <None Include="Resource Files\Shaders\default.vert" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resource Files\Textures\wall.png">
@@ -1285,6 +1285,15 @@
       <Filter>Файлы ресурсов</Filter>
     </Image>
     <Image Include="Resource Files\Textures\RAB_STOL_4.PNG">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="Resource Files\Textures\wall_2.png">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="Resource Files\Textures\damaged_wall.png">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="Resource Files\Textures\old_wall.png">
       <Filter>Файлы ресурсов</Filter>
     </Image>
   </ItemGroup>

@@ -578,15 +578,18 @@
     <None Include="Libraries\include\glm\gtx\wrap.inl" />
     <None Include="Resource Files\Shaders\multicolor_fragments.frag" />
     <None Include="Resource Files\Shaders\multicolor_fragments.vert" />
+    <None Include="Resource Files\Shaders\one_color.frag" />
+    <None Include="Resource Files\Shaders\one_color.vert" />
     <None Include="Resource Files\Shaders\default.frag" />
     <None Include="Resource Files\Shaders\default.vert" />
-    <None Include="Resource Files\Shaders\multitask.frag" />
-    <None Include="Resource Files\Shaders\multitask.vert" />
-    <None Include="Resource Files\Shaders\textured.frag" />
-    <None Include="Resource Files\Shaders\textured.vert" />
+    <None Include="Resource Files\Shaders\textured_old.frag" />
+    <None Include="Resource Files\Shaders\textured_old.vert" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\Downloads\RAB_STOL_4.PNG" />
+    <Image Include="Resource Files\Textures\damaged_wall.png" />
+    <Image Include="Resource Files\Textures\wall_2.png" />
+    <Image Include="Resource Files\Textures\old_wall.png" />
     <Image Include="Resource Files\Textures\RAB_STOL_4.PNG" />
     <Image Include="Resource Files\Textures\wall.png" />
   </ItemGroup>
