@@ -1276,6 +1276,8 @@
     </None>
     <None Include="Resource Files\Shaders\default.frag" />
     <None Include="Resource Files\Shaders\default.vert" />
+    <None Include="Resource Files\Shaders\light.vert" />
+    <None Include="Resource Files\Shaders\light.frag" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resource Files\Textures\wall.png">

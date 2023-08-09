@@ -576,6 +576,8 @@
     <None Include="Libraries\include\glm\gtx\vector_angle.inl" />
     <None Include="Libraries\include\glm\gtx\vector_query.inl" />
     <None Include="Libraries\include\glm\gtx\wrap.inl" />
+    <None Include="Resource Files\Shaders\light.frag" />
+    <None Include="Resource Files\Shaders\light.vert" />
     <None Include="Resource Files\Shaders\multicolor_fragments.frag" />
     <None Include="Resource Files\Shaders\multicolor_fragments.vert" />
     <None Include="Resource Files\Shaders\one_color.frag" />
