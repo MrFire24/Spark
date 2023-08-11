@@ -590,6 +590,9 @@
   <ItemGroup>
     <Image Include="..\..\..\Downloads\RAB_STOL_4.PNG" />
     <Image Include="Resource Files\Textures\damaged_wall.png" />
+    <Image Include="Resource Files\Textures\old_wall_spec.png" />
+    <Image Include="Resource Files\Textures\planks.png" />
+    <Image Include="Resource Files\Textures\planksSpec.png" />
     <Image Include="Resource Files\Textures\wall_2.png" />
     <Image Include="Resource Files\Textures\old_wall.png" />
     <Image Include="Resource Files\Textures\RAB_STOL_4.PNG" />

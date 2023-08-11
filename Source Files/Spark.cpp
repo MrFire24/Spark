@@ -185,7 +185,7 @@ int main()
     lightVBO.Unbind();
     lightEBO.Unbind();
 
-    glm::vec4 lightColor = glm::vec4(0.6f, 0.0f, 1.0f, 0.0f);
+    glm::vec4 lightColor = glm::vec4(1.0f, 1.0f, 1.0f, 0.0f);
     glm::vec3 lightPos = glm::vec3(0.5f, 0.5f, 0.5f);
     glm::mat4 lightModel = glm::mat4(1.0f);
     lightModel = glm::translate(lightModel, lightPos);
@@ -197,6 +197,7 @@ int main()
     lightShader.Activate();
     glUniformMatrix4fv(glGetUniformLocation(lightShader.ID, "model"), 1, GL_FALSE, glm::value_ptr(lightModel));
     glUniform4f(glGetUniformLocation(lightShader.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
+    
     shaderProgram.Activate();
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "model"), 1, GL_FALSE, glm::value_ptr(pyramidModel));
     glUniform4f(glGetUniformLocation(shaderProgram.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
@@ -204,9 +205,10 @@ int main()
 
     
     ////
-    Texture wall("old_wall.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
+    Texture wall("planks.png", GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE);
     wall.texUnit(shaderProgram, "tex0", 0);
-
+    Texture wallSpec("SpecularMap.png", GL_TEXTURE_2D, 1, GL_RGBA, GL_UNSIGNED_BYTE); //GL_RED
+    wallSpec.texUnit(shaderProgram, "tex1", 1);
 
     glEnable(GL_DEPTH_TEST);
 
@@ -226,14 +228,16 @@ int main()
         camera.Inputs(window);
 
         camera.updateMatrix(camera.FOV, 0.01f, 100.0f);
-        lightColor = glm::vec4(a < 1.f ? a : (a < 2.f ? 1.f : (a < 3.f ? 3.f - a : 0.f)), a < 1.f ? 0.f : (a < 2.f ? a - 1.f : (a < 3.f ? 1.f : (a < 4.f ? 4.f - a : 0.f))), a < 2.f ? 0.f : (a < 3.f ? a - 2.f : (a < 4.f ? 1.f : (a < 5.f ? 5.f - a : 0.f))), 0.0f);
+        //lightColor = glm::vec4(a < 1.f ? a : (a < 2.f ? 1.f : (a < 3.f ? 3.f - a : 0.f)), a < 1.f ? 0.f : (a < 2.f ? a - 1.f : (a < 3.f ? 1.f : (a < 4.f ? 4.f - a : 0.f))), a < 2.f ? 0.f : (a < 3.f ? a - 2.f : (a < 4.f ? 1.f : (a < 5.f ? 5.f - a : 0.f))), 0.0f);
 
         shaderProgram.Activate();
         glUniform3f(glGetUniformLocation(shaderProgram.ID, "camPos"), camera.Position.x, camera.Position.y, camera.Position.z);
-        glUniform4f(glGetUniformLocation(shaderProgram.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
+        //glUniform4f(glGetUniformLocation(shaderProgram.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
         camera.Matrix(shaderProgram, "camMatrix");
 
         wall.Bind();
+        wallSpec.Bind();
+
         VAO1.Bind();
 
         glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(int), GL_UNSIGNED_INT, 0);
@@ -258,6 +262,7 @@ int main()
     VBO1.Delete();
     EBO1.Delete();
     wall.Delete();
+    wallSpec.Delete();
     shaderProgram.Delete();
     
 

@@ -13,8 +13,9 @@ in vec3 Normal;
 // Imports the current position from the Vertex Shader
 in vec3 crntPos;
 
-// Gets the Texture Unit from the main function
+// Gets the Texture Units from the main function
 uniform sampler2D tex0;
+uniform sampler2D tex1;
 // Gets the color of the light from the main function
 uniform vec4 lightColor;
 // Gets the position of the light from the main function
@@ -22,10 +23,10 @@ uniform vec3 lightPos;
 // Gets the position of the camera from the main function
 uniform vec3 camPos;
 
-void main()
+vec4 pointLight()
 {
 	// ambient lighting
-	float ambient = 0.15f;
+	float ambient = 0.20f;
 
 	// diffuse lighting
 	vec3 normal = normalize(Normal);
@@ -36,9 +37,17 @@ void main()
 	float specularLight = 0.50f;
 	vec3 viewDirection = normalize(camPos - crntPos);
 	vec3 reflectionDirection = reflect(-lightDirection, normal);
-	float specAmount = pow(max(dot(viewDirection, reflectionDirection), 0.0f), 10);
+	float specAmount = pow(max(dot(viewDirection, reflectionDirection), 0.0f), 12);
 	float specular = specAmount * specularLight;
 
+	return (texture(tex0, texCoord) * (diffuse + ambient) + texture(tex1, texCoord).r * specular) * lightColor;
+}
+
+
+void main()
+{
+	
+
 	// outputs final color
-	FragColor = texture(tex0, texCoord) * lightColor * (diffuse + ambient + specular);
+	FragColor = pointLight();;
 }

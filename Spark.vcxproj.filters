@@ -1298,5 +1298,14 @@
     <Image Include="Resource Files\Textures\old_wall.png">
       <Filter>Файлы ресурсов</Filter>
     </Image>
+    <Image Include="Resource Files\Textures\old_wall_spec.png">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="Resource Files\Textures\planks.png">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="Resource Files\Textures\planksSpec.png">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
   </ItemGroup>
 </Project>
