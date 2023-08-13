@@ -10,6 +10,11 @@
 
 #include"shaderClass.h"
 
+
+#include "VBO.h"
+#include "EBO.h"
+#include "VAO.h"
+
 class Camera
 {
 public:
@@ -29,8 +34,8 @@ public:
 	glm::vec3 Speed = glm::vec3(0.0f, 0.0f, 0.0f);
 	float max_speed = 0.07f;
 	float sensitivity = 150.0f;
-	bool sprint = false;
-	float FOV = 60;
+	float FOV = 65;
+	float isFlashlight = false;
 
 	// Camera constructor to set up initial values
 	Camera(int width, int height, glm::vec3 position);

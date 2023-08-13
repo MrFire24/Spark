@@ -19,7 +19,7 @@
 #include "Hitbox.h"
 
 #define STB_IMAGE_IMPLEMENTATION
-#include"Texture.h"
+#include "Texture.h"
 #include "ShaderClass.h"
 #include "VBO.h"
 #include "EBO.h"
@@ -125,114 +125,108 @@ GLuint lightIndices[] =
 
 int main()
 {
+    // Инициализация GLFW
     glfwInit();
 
-    //Максимальная и минимальная версия GLFW
+    // Указываем версию OpenGL
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    ///типа Core версия
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-
-
+    // Создание окна
     GLFWwindow* window = glfwCreateWindow(1600, 800, "Test Window", NULL, NULL);
     if (window == NULL) {
-        std::cout << "Failed to create GLFW window";
+        std::cout << "Не удалось создать окно GLFW";
         glfwTerminate();
         return -1;
     }
     glfwMakeContextCurrent(window);
 
+    // Инициализация GLAD
     gladLoadGL();
 
-    int width, height; // не нравится
+    int width, height;
     glfwGetWindowSize(window, &width, &height);
     glViewport(0, 0, 1600, 800);
-    ////
 
-    // Создаем шейдер программу
-    Shader shaderProgram("default.vert", "default.frag");
-    // Generates Vertex Array Object and binds it
+    // Создаем шейдерную программу для основных объектов
+    Shader shaderProgram("default");
+
+    // Создаем шейдерную программу для источника света
+    Shader lightShader("light");
+
+    // Создаем объекты вершинных данных (VAO, VBO, EBO) для геометрии основных объектов
     VAO VAO1;
     VAO1.Bind();
-    // Generates Vertex Buffer Object and links it to vertices
     VBO VBO1(vertices, sizeof(vertices));
-    // Generates Element Buffer Object and links it to indices
     EBO EBO1(indices, sizeof(indices));
-    // Links VBO attributes such as coordinates and colors to VAO
     VAO1.LinkAttrib(VBO1, 0, 3, GL_FLOAT, 11 * sizeof(float), (void*)0);
     VAO1.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 11 * sizeof(float), (void*)(3 * sizeof(float)));
     VAO1.LinkAttrib(VBO1, 2, 2, GL_FLOAT, 11 * sizeof(float), (void*)(6 * sizeof(float)));
     VAO1.LinkAttrib(VBO1, 3, 3, GL_FLOAT, 11 * sizeof(float), (void*)(8 * sizeof(float)));
-    // Unbind all to prevent accidentally modifying them
     VAO1.Unbind();
     VBO1.Unbind();
     EBO1.Unbind();
 
-
-    Shader lightShader("light.vert", "light.frag");
-    // Generates Vertex Array Object and binds it
+    // Создаем объекты вершинных данных (VAO, VBO, EBO) для источника света
     VAO lightVAO;
     lightVAO.Bind();
-    // Generates Vertex Buffer Object and links it to vertices
     VBO lightVBO(lightVertices, sizeof(lightVertices));
-    // Generates Element Buffer Object and links it to indices
     EBO lightEBO(lightIndices, sizeof(lightIndices));
-    // Links VBO attributes such as coordinates and colors to VAO
     lightVAO.LinkAttrib(lightVBO, 0, 3, GL_FLOAT, 3 * sizeof(float), (void*)0);
-    // Unbind all to prevent accidentally modifying them
     lightVAO.Unbind();
     lightVBO.Unbind();
     lightEBO.Unbind();
 
+    // Создаем камеру
+    Camera camera(width, height, glm::vec3(0.0f, 0.0f, 3.0f));
+
+    // Настройки источника света
     glm::vec4 lightColor = glm::vec4(1.0f, 1.0f, 1.0f, 0.0f);
     glm::vec3 lightPos = glm::vec3(0.5f, 0.5f, 0.5f);
     glm::mat4 lightModel = glm::mat4(1.0f);
     lightModel = glm::translate(lightModel, lightPos);
 
+    // Настройки геометрии основных объектов
     glm::vec3 pyramidPos = glm::vec3(0.0f, 0.0f, 0.0f);
     glm::mat4 pyramidModel = glm::mat4(1.0f);
     pyramidModel = glm::translate(pyramidModel, pyramidPos);
 
+    // Активация шейдера для источника света и передача параметров в шейдер
     lightShader.Activate();
     glUniformMatrix4fv(glGetUniformLocation(lightShader.ID, "model"), 1, GL_FALSE, glm::value_ptr(lightModel));
     glUniform4f(glGetUniformLocation(lightShader.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
-    
+
+    // Активация шейдера для основных объектов и передача параметров в шейдер
     shaderProgram.Activate();
     glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "model"), 1, GL_FALSE, glm::value_ptr(pyramidModel));
     glUniform4f(glGetUniformLocation(shaderProgram.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
     glUniform3f(glGetUniformLocation(shaderProgram.ID, "lightPos"), lightPos.x, lightPos.y, lightPos.z);
 
-    
-    ////
+    // Загрузка текстур
     Texture wall("planks.png", GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE);
     wall.texUnit(shaderProgram, "tex0", 0);
-    Texture wallSpec("SpecularMap.png", GL_TEXTURE_2D, 1, GL_RGBA, GL_UNSIGNED_BYTE); //GL_RED
+    Texture wallSpec("SpecularMap.png", GL_TEXTURE_2D, 1, GL_RGBA, GL_UNSIGNED_BYTE);
     wallSpec.texUnit(shaderProgram, "tex1", 1);
 
     glEnable(GL_DEPTH_TEST);
 
-
-    Camera camera(width, height, glm::vec3(0.0f, 0.0f, 3.0f));
-
     float a = 0;
 
-
-    ////
     while (!glfwWindowShouldClose(window)) {
+        
         if (a >= 5.0f) a = 0;
         a += 0.01;
         glClearColor(0.0f, 0.1f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        
+
+        // Обработка ввода и обновление камеры
         camera.Inputs(window);
-
         camera.updateMatrix(camera.FOV, 0.01f, 100.0f);
-        //lightColor = glm::vec4(a < 1.f ? a : (a < 2.f ? 1.f : (a < 3.f ? 3.f - a : 0.f)), a < 1.f ? 0.f : (a < 2.f ? a - 1.f : (a < 3.f ? 1.f : (a < 4.f ? 4.f - a : 0.f))), a < 2.f ? 0.f : (a < 3.f ? a - 2.f : (a < 4.f ? 1.f : (a < 5.f ? 5.f - a : 0.f))), 0.0f);
 
+        // Рендеринг геометрии основных объектов
         shaderProgram.Activate();
         glUniform3f(glGetUniformLocation(shaderProgram.ID, "camPos"), camera.Position.x, camera.Position.y, camera.Position.z);
-        //glUniform4f(glGetUniformLocation(shaderProgram.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
         camera.Matrix(shaderProgram, "camMatrix");
 
         wall.Bind();
@@ -242,22 +236,18 @@ int main()
 
         glDrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(int), GL_UNSIGNED_INT, 0);
 
-
-        
+        // Рендеринг источника света
         lightShader.Activate();
         camera.Matrix(lightShader, "camMatrix");
 
         lightVAO.Bind();
-        glUniform4f(glGetUniformLocation(lightShader.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
         glDrawElements(GL_TRIANGLES, sizeof(lightIndices) / sizeof(int), GL_UNSIGNED_INT, 0);
 
-
         glfwSwapBuffers(window);
-
         glfwPollEvents();
     }
 
-    
+    // Освобождение ресурсов
     VAO1.Delete();
     VBO1.Delete();
     EBO1.Delete();

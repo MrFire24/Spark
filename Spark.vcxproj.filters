@@ -1307,5 +1307,8 @@
     <Image Include="Resource Files\Textures\planksSpec.png">
       <Filter>Файлы ресурсов</Filter>
     </Image>
+    <Image Include="Resource Files\Textures\SpecularMap.png">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
   </ItemGroup>
 </Project>

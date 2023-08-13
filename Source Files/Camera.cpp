@@ -3,138 +3,155 @@
 
 #define Up glm::vec3(0.0f, 1.0f, 0.0f)
 
+// Конструктор класса Camera
 Camera::Camera(int width, int height, glm::vec3 position)
 {
-	Camera::width = width;
-	Camera::height = height;
-	Position = position;
+    Camera::width = width;
+    Camera::height = height;
+    Position = position;
 }
 
+// Обновление матрицы камеры
 void Camera::updateMatrix(float FOVdeg, float nearPlane, float farPlane)
 {
-	// Initializes matrices since otherwise they will be the null matrix
-	glm::mat4 view = glm::mat4(1.0f);
-	glm::mat4 projection = glm::mat4(1.0f);
+    // Инициализация матриц
+    glm::mat4 view = glm::mat4(1.0f);
+    glm::mat4 projection = glm::mat4(1.0f);
 
-	// Makes camera look in the right direction from the right position
-	view = glm::lookAt(Position, Position + Orientation, Up);
-	// Adds perspective to the scene
-	projection = glm::perspective(glm::radians(FOVdeg), (float)width / height, nearPlane, farPlane);
+    // Создание матрицы вида для камеры
+    view = glm::lookAt(Position, Position + Orientation, Up);
 
-	// Sets new camera matrix
-	cameraMatrix = projection * view;
+    // Создание матрицы проекции
+    projection = glm::perspective(glm::radians(FOVdeg), (float)width / height, nearPlane, farPlane);
+
+    // Обновление матрицы камеры
+    cameraMatrix = projection * view;
 }
 
+// Передача матрицы камеры в шейдер
 void Camera::Matrix(Shader& shader, const char* uniform)
 {
-	// Exports camera matrix
-	glUniformMatrix4fv(glGetUniformLocation(shader.ID, uniform), 1, GL_FALSE, glm::value_ptr(cameraMatrix));
+    glUniformMatrix4fv(glGetUniformLocation(shader.ID, uniform), 1, GL_FALSE, glm::value_ptr(cameraMatrix));
 }
 
+// Обработка ввода с клавиатуры и мыши
 void Camera::Inputs(GLFWwindow* window)
 {
-	bool isAnyButtonPressed = false;
+    bool isAnyButtonPressed = false;
+    bool sprint;
 
-	#define magic powf(1.0f / (powf(std::sqrt(Speed.x * Speed.x + Speed.y * Speed.y + Speed.z * Speed.z) - max_speed / 0.7, 2.0f) + 0.85f - (sprint ? 0.1 : 0)), 10) / 1000.0f
+    // Определение состояния бега
+    if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+    {
+        sprint = true;
+    }
+    else if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_RELEASE)
+    {
+        sprint = false;
+    }
 
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-	{
-		isAnyButtonPressed = true;
-		//std::cout << std::endl << Speed.x << std::endl << Speed.y << std::endl << Speed.z << std::endl << std::sqrt(Speed.x * Speed.x + Speed.y * Speed.y + Speed.z * Speed.z) << std::endl << powf(1.0f / (powf(std::sqrt(Speed.x * Speed.x + Speed.y * Speed.y + Speed.z * Speed.z) - max_speed, 2.0f) + 1.0f), 100) << std::endl;
-		Speed += Orientation * magic;
-	}
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-	{
-		isAnyButtonPressed = true;
-		Speed += -glm::normalize(glm::cross(Orientation, Up)) * magic;
-	}
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-	{
-		isAnyButtonPressed = true;
-		Speed += -Orientation * magic;
-	}
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-	{
-		isAnyButtonPressed = true;
-		Speed += glm::normalize(glm::cross(Orientation, Up)) * magic;
-	}
-	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-	{
-		isAnyButtonPressed = true;
-		Speed += Up * magic;
-	}
-	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-	{
-		isAnyButtonPressed = true;
-		Speed += -Up * magic;
-	}
-	if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
-	{
-		sprint = true;
-	}
-	else if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_RELEASE)
-	{
-		sprint = false;
-	}
+    // Определение "магического" коэффициента
+    float k = powf(1.0f / (powf(std::sqrt(Speed.x * Speed.x + Speed.y * Speed.y + Speed.z * Speed.z) - max_speed / 0.7, 2.0f) + 0.85f - (sprint ? 0.1 : 0)), 10) / 1000.0f;
 
-	Speed /= 1.1f;
+    // Обрабатываем нажатие клавиши W (движение вперед)
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+    {
+        isAnyButtonPressed = true;
+        Speed += Orientation * k;
+    }
 
-	Position += Speed;
+    // Обрабатываем нажатие клавиши A (движение влево)
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+    {
+        isAnyButtonPressed = true;
+        Speed += -glm::normalize(glm::cross(Orientation, Up)) * k;
+    }
 
-	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE) == GLFW_PRESS)
-	{
-		FOV -= (FOV - 30.0f) / 5.0f;
-	}
-	else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE) == GLFW_RELEASE)
-	{
-		FOV += (60.0f - FOV) / 5.0f;
-	}
+    // Обрабатываем нажатие клавиши S (движение назад)
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+    {
+        isAnyButtonPressed = true;
+        Speed += -Orientation * k;
+    }
 
+    // Обрабатываем нажатие клавиши D (движение вправо)
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+    {
+        isAnyButtonPressed = true;
+        Speed += glm::normalize(glm::cross(Orientation, Up)) * k;
+    }
 
-	// Handles mouse inputs
-	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
-	{
-		// Hides mouse cursor
-		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+    // Обрабатываем нажатие клавиши Space (движение вверх)
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+    {
+        isAnyButtonPressed = true;
+        Speed += Up * k;
+    }
 
-		// Prevents camera from jumping on the first click
-		if (firstClick)
-		{
-			glfwSetCursorPos(window, (width / 2), (height / 2));
-			firstClick = false;
-		}
+    // Обрабатываем нажатие клавиши Left Shift (движение вниз)
+    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+    {
+        isAnyButtonPressed = true;
+        Speed += -Up * k;
+    }
 
-		// Stores the coordinates of the cursor
-		double mouseX;
-		double mouseY;
-		// Fetches the coordinates of the cursor
-		glfwGetCursorPos(window, &mouseX, &mouseY);
+    // Затухание скорости
+    Speed /= 1.1f;
 
-		// Normalizes and shifts the coordinates of the cursor such that they begin in the middle of the screen
-		// and then "transforms" them into degrees 
-		float rotX = sensitivity * (float)(mouseY - (height / 2)) / height;
-		float rotY = sensitivity * (float)(mouseX - (width / 2)) / width;
+    // Обновление позиции
+    Position += Speed;
 
-		// Calculates upcoming vertical change in the Orientation
-		glm::vec3 newOrientation = glm::rotate(Orientation, glm::radians(-rotX), glm::normalize(glm::cross(Orientation, Up)));
+    // Обработка средней кнопки мыши для зума
+    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE) == GLFW_PRESS)
+    {
+        FOV -= (FOV - 25.0f) / 5.0f;
+    }
+    else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE) == GLFW_RELEASE)
+    {
+        FOV += (65.0f - FOV) / 5.0f;
+    }
 
-		// Decides whether or not the next vertical Orientation is legal or not
-		if (abs(glm::angle(newOrientation, Up) - glm::radians(90.0f)) <= glm::radians(85.0f))
-		{
-			Orientation = newOrientation;
-		}
+    // Обработка вращения камеры при нажатии левой кнопки мыши
+    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+    {
+        // Скрытие указателя мыши
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
-		// Rotates the Orientation left and right
-		Orientation = glm::rotate(Orientation, glm::radians(-rotY), Up);
+        // Обработка первого нажатия кнопки
+        if (firstClick)
+        {
+            glfwSetCursorPos(window, (width / 2), (height / 2));
+            firstClick = false;
+        }
 
-		// Sets mouse cursor to the middle of the screen so that it doesn't end up roaming around
-		glfwSetCursorPos(window, (width / 2), (height / 2));
-	}
-	else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE)
-	{
-		// Unhides cursor since camera is not looking around anymore
-		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-		// Makes sure the next time the camera looks around it doesn't jump
-		firstClick = true;
-	}
+        // Получение координат указателя мыши
+        double mouseX;
+        double mouseY;
+        glfwGetCursorPos(window, &mouseX, &mouseY);
+
+        // Нормализация и коррекция координат мыши
+        float rotX = sensitivity * (float)(mouseY - (height / 2)) / height;
+        float rotY = sensitivity * (float)(mouseX - (width / 2)) / width;
+
+        // Расчет новой ориентации вертикального взгляда
+        glm::vec3 newOrientation = glm::rotate(Orientation, glm::radians(-rotX), glm::normalize(glm::cross(Orientation, Up)));
+
+        // Корректировка ориентации в случае крена
+        if (abs(glm::angle(newOrientation, Up) - glm::radians(90.0f)) <= glm::radians(85.0f))
+        {
+            Orientation = newOrientation;
+        }
+
+        // Поворот ориентации влево и вправо
+        Orientation = glm::rotate(Orientation, glm::radians(-rotY), Up);
+
+        // Установка указателя мыши в центр экрана
+        glfwSetCursorPos(window, (width / 2), (height / 2));
+    }
+    else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE)
+    {
+        // Показ указателя мыши
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        firstClick = true;
+    }
 }

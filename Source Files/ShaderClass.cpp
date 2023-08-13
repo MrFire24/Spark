@@ -56,6 +56,8 @@ Shader::Shader(const char* vertexFile, const char* fragmentFile) {
 	glDeleteShader(fragmentShader);
 }
 
+Shader::Shader(const char* File) : Shader((std::string(File) + ".vert").c_str(), (std::string(File) + ".frag").c_str()) {}
+
 // Активация данной программы шейдеров, делая её текущей для использования при отрисовке.
 void Shader::Activate() {
 	glUseProgram(ID);
