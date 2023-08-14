@@ -8,7 +8,10 @@
 #include <cerrno>
 #include <filesystem>
 
-std::string get_file_contains(const char* filename);
+// Получаем путь к рабочей директории единожды при запуске программы
+const std::filesystem::path currentPath = std::filesystem::current_path();
+
+std::string get_file_contents(std::filesystem::path filename);
 
 class Shader{
 public:

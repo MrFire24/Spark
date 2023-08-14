@@ -1,13 +1,11 @@
 #include "ShaderClass.h"
 
-// Получаем путь к рабочей директории единожды при запуске программы
-const std::filesystem::path currentPath = std::filesystem::current_path();
 
-std::string get_file_contents(const char* filename)
+std::string get_file_contents(std::filesystem::path filename)
 {
 
 	// Открываем файл по абсолютному пути
-	std::ifstream in(currentPath / "Resource Files" / "Shaders" / filename, std::ios::binary);
+	std::ifstream in(filename, std::ios::binary);
 	if (in)
 	{
 		std::string contents;
@@ -24,8 +22,8 @@ std::string get_file_contents(const char* filename)
 // Конструктор класса Shader принимает имена файлов с вершинным и фрагментным шейдерами.
 Shader::Shader(const char* vertexFile, const char* fragmentFile) {
 	// Загрузка содержимого файлов с кодом шейдеров в строковые переменные.
-	std::string vertexCode = get_file_contents(vertexFile);
-	std::string fragmentCode = get_file_contents(fragmentFile);
+	std::string vertexCode = get_file_contents(currentPath / "Resource Files" / "Shaders" / vertexFile);
+	std::string fragmentCode = get_file_contents(currentPath / "Resource Files" / "Shaders" / fragmentFile);
 
 	// Получение указателей на сырые строки (const char*) из строковых переменных,
 	// которые необходимы для функций OpenGL.
@@ -36,6 +34,7 @@ Shader::Shader(const char* vertexFile, const char* fragmentFile) {
 	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertexShader, 1, &vertexSource, NULL);
 	glCompileShader(vertexShader);
+	compileErrors(vertexShader, "VERTEX");
 
 	// Создание объекта фрагментного шейдера, компиляция исходного кода и проверка ошибок.
 	GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -49,6 +48,7 @@ Shader::Shader(const char* vertexFile, const char* fragmentFile) {
 	glAttachShader(ID, vertexShader);
 	glAttachShader(ID, fragmentShader);
 	glLinkProgram(ID);
+	compileErrors(ID, "PROGRAM");
 
 	// Удаление объектов шейдеров после того, как они были прикреплены к программе,
 	// так как они больше не нужны.

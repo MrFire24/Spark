@@ -78,6 +78,12 @@
     <ClCompile Include="Source Files\Camera.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="Source Files\Mesh.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="Source Files\Model.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imgui\imconfig.h">
@@ -863,6 +869,15 @@
     <ClInclude Include="Header Files\Camera.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="Header Files\Mesh.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Header Files\Model.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\include\json\json.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="imgui.ini" />
@@ -1278,6 +1293,10 @@
     <None Include="Resource Files\Shaders\default.vert" />
     <None Include="Resource Files\Shaders\light.vert" />
     <None Include="Resource Files\Shaders\light.frag" />
+    <None Include="Resource Files\Models\sword\scene.gltf" />
+    <None Include="Resource Files\Models\sword\scene.bin">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resource Files\Textures\wall.png">
@@ -1308,6 +1327,9 @@
       <Filter>Файлы ресурсов</Filter>
     </Image>
     <Image Include="Resource Files\Textures\SpecularMap.png">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="Resource Files\Models\sword\textures\Object001_mtl_baseColor.jpeg">
       <Filter>Файлы ресурсов</Filter>
     </Image>
   </ItemGroup>

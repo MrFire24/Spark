@@ -1,48 +1,128 @@
 #include"Texture.h"
 
-const std::filesystem::path currentPath = std::filesystem::current_path();
 
-Texture::Texture(const char* image, GLenum texType, GLuint slot, GLenum format, GLenum pixelType)
+Texture::Texture(const char* image, const char* texType, GLuint slot)
 {
-	// Assigns the type of the texture ot the texture object
 	type = texType;
-
 	// Stores the width, height, and the number of color channels of the image
 	int widthImg, heightImg, numColCh;
 	// Flips the image so it appears right side up
 	stbi_set_flip_vertically_on_load(true);
 	// Reads the image from a file and stores it in bytes
-	unsigned char* bytes = stbi_load((currentPath / "Resource Files" / "Textures" / image).generic_string().c_str(), &widthImg, &heightImg, &numColCh, 0);
+	std::cout << (currentPath / "Resource Files" / "Models" / "sword" / image).generic_string().c_str() << std::endl;
+	unsigned char* bytes = stbi_load((currentPath / "Resource Files" / "Models" / "sword" / image).generic_string().c_str(), &widthImg, &heightImg, &numColCh, 0);
 
 	// Generates an OpenGL texture object
 	glGenTextures(1, &ID);
 	// Assigns the texture to a Texture Unit
 	glActiveTexture(GL_TEXTURE0 + slot);
 	unit = slot;
-	glBindTexture(texType, ID);
+	glBindTexture(GL_TEXTURE_2D, ID);
 
 	// Configures the type of algorithm that is used to make the image smaller or bigger
-	glTexParameteri(texType, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
-	glTexParameteri(texType, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 	// Configures the way the texture repeats (if it does at all)
-	glTexParameteri(texType, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(texType, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 	// Extra lines in case you choose to use GL_CLAMP_TO_BORDER
 	// float flatColor[] = {1.0f, 1.0f, 1.0f, 1.0f};
 	// glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, flatColor);
 
-	// Assigns the image to the OpenGL Texture object
-	glTexImage2D(texType, 0, GL_RGBA, widthImg, heightImg, 0, format, pixelType, bytes);
+	// Check what type of color channels the texture has and load it accordingly
+	std::cout << type << std::endl;
+	std::cout << widthImg << std::endl;
+	if (type == "normal") { // prevents SRGB from deforming normals
+		glTexImage2D
+		(
+			GL_TEXTURE_2D,
+			0,
+			GL_RGB,
+			widthImg,
+			heightImg,
+			0,
+			GL_RGBA,
+			GL_UNSIGNED_BYTE,
+			bytes
+		);
+		std::cout << "1" << std::endl;
+	}
+	else if (type == "displacement"){
+		glTexImage2D
+		(
+			GL_TEXTURE_2D,
+			0,
+			GL_RED,
+			widthImg,
+			heightImg,
+			0,
+			GL_RED,
+			GL_UNSIGNED_BYTE,
+			bytes
+		);
+		std::cout << "2" << std::endl;
+	}
+	else if (numColCh == 4){
+		glTexImage2D
+		(
+			GL_TEXTURE_2D,
+			0,
+			GL_SRGB_ALPHA,
+			widthImg,
+			heightImg,
+			0,
+			GL_RGBA,
+			GL_UNSIGNED_BYTE,
+			bytes
+		);
+		std::cout << "3" << std::endl;
+	}
+	else if (numColCh == 3){
+		glTexImage2D
+		(
+			GL_TEXTURE_2D,
+			0,
+			GL_SRGB,
+			widthImg,
+			heightImg,
+			0,
+			GL_RGB,
+			GL_UNSIGNED_BYTE,
+			bytes
+		);
+		std::cout << "4" << std::endl;
+	}
+	else if (numColCh == 1){
+		glTexImage2D
+		(
+			GL_TEXTURE_2D,
+			0,
+			GL_SRGB,
+			widthImg,
+			heightImg,
+			0,
+			GL_RED,
+			GL_UNSIGNED_BYTE,
+			bytes
+		);
+		std::cout << "5" << std::endl;
+	}/*
+	else {
+		throw std::invalid_argument("Automatic Texture type recognition failed");
+		std::cout << "Automatic Texture type recognition failed" << std::endl;
+	}
+	*/
+
 	// Generates MipMaps
-	glGenerateMipmap(texType);
+	glGenerateMipmap(GL_TEXTURE_2D);
 
 	// Deletes the image data as it is already in the OpenGL Texture object
 	stbi_image_free(bytes);
 
 	// Unbinds the OpenGL Texture object so that it can't accidentally be modified
-	glBindTexture(texType, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void Texture::texUnit(Shader& shader, const char* uniform, GLuint unit)
@@ -58,12 +138,12 @@ void Texture::texUnit(Shader& shader, const char* uniform, GLuint unit)
 void Texture::Bind()
 {
 	glActiveTexture(GL_TEXTURE0 + unit);
-	glBindTexture(type, ID);
+	glBindTexture(GL_TEXTURE_2D, ID);
 }
 
 void Texture::Unbind()
 {
-	glBindTexture(type, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void Texture::Delete()

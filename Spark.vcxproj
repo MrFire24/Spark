@@ -168,6 +168,8 @@
     <ClCompile Include="Source Files\Camera.cpp" />
     <ClCompile Include="Source Files\EBO.cpp" />
     <ClCompile Include="Source Files\glad.c" />
+    <ClCompile Include="Source Files\Mesh.cpp" />
+    <ClCompile Include="Source Files\Model.cpp" />
     <ClCompile Include="Source Files\Object.cpp" />
     <ClCompile Include="Source Files\ShaderClass.cpp" />
     <ClCompile Include="Source Files\Spark.cpp" />
@@ -181,6 +183,8 @@
     <ClInclude Include="Header Files\Camera.h" />
     <ClInclude Include="Header Files\EBO.h" />
     <ClInclude Include="Header Files\Hitbox.h" />
+    <ClInclude Include="Header Files\Mesh.h" />
+    <ClInclude Include="Header Files\Model.h" />
     <ClInclude Include="Header Files\Object.h" />
     <ClInclude Include="Header Files\ShaderClass.h" />
     <ClInclude Include="Header Files\Texture.h" />
@@ -438,6 +442,7 @@
     <ClInclude Include="Libraries\include\glm\vec3.hpp" />
     <ClInclude Include="Libraries\include\glm\vec4.hpp" />
     <ClInclude Include="Libraries\include\glm\vector_relational.hpp" />
+    <ClInclude Include="Libraries\include\json\json.h" />
     <ClInclude Include="Libraries\include\stb\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
@@ -576,6 +581,8 @@
     <None Include="Libraries\include\glm\gtx\vector_angle.inl" />
     <None Include="Libraries\include\glm\gtx\vector_query.inl" />
     <None Include="Libraries\include\glm\gtx\wrap.inl" />
+    <None Include="Resource Files\Models\sword\scene.bin" />
+    <None Include="Resource Files\Models\sword\scene.gltf" />
     <None Include="Resource Files\Shaders\light.frag" />
     <None Include="Resource Files\Shaders\light.vert" />
     <None Include="Resource Files\Shaders\multicolor_fragments.frag" />
@@ -589,6 +596,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\Downloads\RAB_STOL_4.PNG" />
+    <Image Include="Resource Files\Models\sword\textures\Object001_mtl_baseColor.jpeg" />
     <Image Include="Resource Files\Textures\damaged_wall.png" />
     <Image Include="Resource Files\Textures\old_wall_spec.png" />
     <Image Include="Resource Files\Textures\planks.png" />
