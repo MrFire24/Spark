@@ -103,6 +103,10 @@ int main()
     Model sword("sword");
     Model grindstone("Grindstone");
 
+    sword.Scale /= 10;
+    grindstone.Scale /= 20;
+
+    sword.Position.x += 5;
 
 
     float a = 0;
@@ -113,6 +117,7 @@ int main()
         a += 0.01;
         glClearColor(0.0f, 0.1f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 
         // Обработка ввода и обновление камеры
         camera.Inputs(window);

@@ -23,7 +23,7 @@ void Model::Draw(Shader& shader, Camera& camera)
 	// Go over all meshes and draw each one
 	for (unsigned int i = 0; i < meshes_.size(); i++)
 	{
-		meshes_[i].Mesh::Draw(shader, camera, matricesMeshes_[i]);
+		meshes_[i].Mesh::Draw(shader, camera, matricesMeshes_[i], Position, Orientation, Scale);
 	}
 }
 
@@ -105,7 +105,6 @@ void Model::traverseNode(unsigned int nextNode, glm::mat4 matrix)
 	glm::mat4 sca = glm::mat4(1.0f);
 
 	// Use translation, rotation, and scale to change the initialized matrices
-	translation.x += 1.3f;
 	trans = glm::translate(trans, translation);
 	rot = glm::mat4_cast(rotation);
 	sca = glm::scale(sca, scale);
