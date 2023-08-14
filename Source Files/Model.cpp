@@ -13,6 +13,9 @@ Model::Model(const char* file) {
 
 	// Traverse all nodes
 	traverseNode(0);
+	for (auto mesh : rotationsMeshes_) {
+		//mesh *= glm::angleAxis(glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	}
 }
 
 void Model::Draw(Shader& shader, Camera& camera)
@@ -70,10 +73,10 @@ void Model::traverseNode(unsigned int nextNode, glm::mat4 matrix)
 	{
 		float rotValues[4] =
 		{
-			node["rotation"][3],
 			node["rotation"][0],
 			node["rotation"][1],
-			node["rotation"][2]
+			node["rotation"][2],
+			node["rotation"][3]
 		};
 		rotation = glm::make_quat(rotValues);
 	}
@@ -106,6 +109,8 @@ void Model::traverseNode(unsigned int nextNode, glm::mat4 matrix)
 	trans = glm::translate(trans, translation);
 	rot = glm::mat4_cast(rotation);
 	sca = glm::scale(sca, scale);
+
+	//mesh *= glm::angleAxis(glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 
 	// Multiply all matrices together
 	glm::mat4 matNextNode = matrix * matNode * trans * rot * sca;
