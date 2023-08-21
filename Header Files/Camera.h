@@ -22,20 +22,19 @@ public:
 	glm::vec3 Position;
 	glm::vec3 Orientation = glm::vec3(0.0f, 0.0f, -1.0f);
 	glm::mat4 cameraMatrix = glm::mat4(1.0f);
-
-	// Prevents the camera from jumping around when first clicking left click
-	bool firstClick = true;
+	glm::vec3 Speed = glm::vec3(0.0f, 0.0f, 0.0f);
 
 	// Stores the width and height of the window
 	int width;
 	int height;
 
 	// Adjust the speed of the camera and it's sensitivity when looking around
-	glm::vec3 Speed = glm::vec3(0.0f, 0.0f, 0.0f);
-	float max_speed = 0.07f;
+	float max_speed = 1.0f;
+	float max_accs =  0.0001f;
+	float accs_time = 10.0f;
 	float sensitivity = 150.0f;
 	float FOV = 65;
-	float isFlashlight = false;
+	
 
 	// Camera constructor to set up initial values
 	Camera(int width, int height, glm::vec3 position);
@@ -44,4 +43,12 @@ public:
 	void Matrix(Shader& shader, const char* uniform);
 	// Handles camera inputs
 	void Inputs(GLFWwindow* window);
+
+private:
+	float isFlashlight_ = false;
+	bool firstClick_ = true;
+	bool isAnyButtonPressed_ = false;
+	float motionStartTime = 0;
+
+	float acceleration();
 };

@@ -9,6 +9,8 @@
 #include <filesystem>
 #include <stb/stb_image.h>
 #include <string>
+#include <windows.h>
+#include <thread>
 
 #include<glm/glm.hpp>
 #include<glm/gtc/matrix_transform.hpp>
@@ -17,9 +19,22 @@
 #include "vec3.h"
 #include "Object.h"
 #include "Hitbox.h"
+#include "deltaTime.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "Model.h"
+
+void clearscreen()
+{
+    HANDLE hOut;
+    COORD Position;
+
+    hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    Position.X = 0;
+    Position.Y = 0;
+    SetConsoleCursorPosition(hOut, Position);
+}
 
 void rgb_to_hsv(float rgb[3], float hsv[3]) {
     float min = std::min(rgb[0], std::min(rgb[1], rgb[2]));
@@ -45,12 +60,12 @@ int main()
     glfwInit();
 
     // Указываем версию OpenGL
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    //glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    //glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     // Создание окна
-    GLFWwindow* window = glfwCreateWindow(1600, 800, "Test Window", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(1100, 600, "Test Window", NULL, NULL);
     if (window == NULL) {
         std::cout << "Не удалось создать окно GLFW";
         glfwTerminate();
@@ -111,6 +126,7 @@ int main()
 
     float a = 0;
 
+    //system("cls");
     while (!glfwWindowShouldClose(window)) {
         
         if (a >= 5.0f) a = 0;
@@ -121,7 +137,7 @@ int main()
 
         // Обработка ввода и обновление камеры
         camera.Inputs(window);
-        camera.updateMatrix(camera.FOV, 0.01f, 100.0f);
+        camera.updateMatrix(camera.FOV, 0.01f, 1000.0f);
 
         //light.Draw(lightShader, camera);
         sword.Draw(shaderProgram, camera);
@@ -133,6 +149,11 @@ int main()
 
         glfwSwapBuffers(window);
         glfwPollEvents();
+        deltaTime.updateTime();
+        clearscreen();
+        std::cout << "FPS: " << deltaTime.fps() << "\tvalue: " << deltaTime << std::endl;
+
+        //std::this_thread::sleep_for(std::chrono::milliseconds(150));
     }
 
     // Освобождение ресурсов

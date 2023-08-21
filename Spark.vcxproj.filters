@@ -84,6 +84,9 @@
     <ClCompile Include="Source Files\Model.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="Source Files\deltaTime.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imgui\imconfig.h">
@@ -878,6 +881,9 @@
     <ClInclude Include="Libraries\include\json\json.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="Header Files\deltaTime.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="imgui.ini" />
@@ -1332,5 +1338,8 @@
     <Image Include="Resource Files\Models\sword\textures\Object001_mtl_baseColor.jpeg">
       <Filter>Файлы ресурсов</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="Libraries\lib\glfw3.lib" />
   </ItemGroup>
 </Project>

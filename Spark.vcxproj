@@ -72,23 +72,27 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\user\source\repos\Spark\Resource Files\Shaders;C:\Users\user\source\repos\Spark\Libraries\include;$(IncludePath)</IncludePath>
-    <ReferencePath>C:\Users\user\source\repos\Spark\Libraries\lib;$(ReferencePath)</ReferencePath>
+    <IncludePath>$(ProjectDir)\Resource Files\Shaders;$(ProjectDir)\Libraries\include;$(IncludePath)</IncludePath>
+    <ReferencePath>$(ProjectDir)\Libraries\lib;$(ReferencePath)</ReferencePath>
+    <LibraryPath>$(ProjectDir)\Libraries\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\Users\user\source\repos\Spark\Resource Files\Shaders;C:\Users\user\source\repos\Spark\Libraries\include;$(IncludePath)</IncludePath>
-    <ReferencePath>C:\Users\user\source\repos\Spark\Libraries\lib;$(ReferencePath)</ReferencePath>
+    <IncludePath>$(ProjectDir)\Resource Files\Shaders;$(ProjectDir)\Libraries\include;$(IncludePath)</IncludePath>
+    <ReferencePath>$(ProjectDir)\Libraries\lib;$(ReferencePath)</ReferencePath>
+    <LibraryPath>$(ProjectDir)\Libraries\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\user\source\repos\Spark\Resource Files\Shaders;C:\Users\user\source\repos\Spark\Libraries\include;$(IncludePath)</IncludePath>
-    <ReferencePath>C:\Users\user\source\repos\Spark\Libraries\lib;$(ReferencePath)</ReferencePath>
+    <IncludePath>$(ProjectDir)\Resource Files\Shaders;$(ProjectDir)\Libraries\include;$(IncludePath)</IncludePath>
+    <ReferencePath>$(ProjectDir)\Libraries\lib;$(ReferencePath)</ReferencePath>
+    <LibraryPath>$(ProjectDir)\Libraries\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\Users\user\source\repos\Spark\Resource Files\Shaders;C:\Users\user\source\repos\Spark\Libraries\include;$(IncludePath)</IncludePath>
-    <ReferencePath>C:\Users\user\source\repos\Spark\Libraries\lib;$(ReferencePath)</ReferencePath>
+    <IncludePath>$(ProjectDir)\Resource Files\Shaders;$(ProjectDir)\Libraries\include;$(IncludePath)</IncludePath>
+    <ReferencePath>$(ProjectDir)\Libraries\lib;$(ReferencePath)</ReferencePath>
+    <LibraryPath>$(ProjectDir)\Libraries\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -97,7 +101,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\user\source\repos\Spark\Header Files;$(SolutionDir)\imgui\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\Header Files;$(SolutionDir)\imgui\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -114,7 +118,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\user\source\repos\Spark\Header Files;$(SolutionDir)\imgui\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\Header Files;$(SolutionDir)\imgui\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -131,7 +135,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\user\source\repos\Spark\Header Files;$(SolutionDir)\imgui\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\Header Files;$(SolutionDir)\imgui\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -148,7 +152,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\Users\user\source\repos\Spark\Header Files;$(SolutionDir)\imgui\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\Header Files;$(SolutionDir)\imgui\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -166,6 +170,7 @@
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="Libraries\include\glm\detail\glm.cpp" />
     <ClCompile Include="Source Files\Camera.cpp" />
+    <ClCompile Include="Source Files\deltaTime.cpp" />
     <ClCompile Include="Source Files\EBO.cpp" />
     <ClCompile Include="Source Files\glad.c" />
     <ClCompile Include="Source Files\Mesh.cpp" />
@@ -182,6 +187,7 @@
   <ItemGroup>
     <ClInclude Include="Header Files\Camera.h" />
     <ClInclude Include="Header Files\EBO.h" />
+    <ClInclude Include="Header Files\deltaTime.h" />
     <ClInclude Include="Header Files\Hitbox.h" />
     <ClInclude Include="Header Files\Mesh.h" />
     <ClInclude Include="Header Files\Model.h" />
@@ -606,6 +612,9 @@
     <Image Include="Resource Files\Textures\old_wall.png" />
     <Image Include="Resource Files\Textures\RAB_STOL_4.PNG" />
     <Image Include="Resource Files\Textures\wall.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="Libraries\lib\glfw3.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
